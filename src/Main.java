@@ -41,29 +41,46 @@ LuxRoom -> UltraLuxRoom
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Тестирование InRoomService:");
-        InRoomService economyService = new InRoomService(new EconomyRoom(101));
-        InRoomService standardService = new InRoomService(new StandardRoom(201));
-        InRoomService luxService = new InRoomService(new LuxRoom(301));
-        InRoomService ultraLuxService = new InRoomService(new UltraLuxRoom(401));
+        System.out.println("Тестирование RoomService:");
+        RoomService<Room> service = new InRoomService<>();
         System.out.print("EconomyRoom: ");
-        economyService.reserve();
+        Room room = new EconomyRoom(101);
+        service.reserve(room);
         System.out.print("StandardRoom: ");
-        standardService.reserve();
+        service.reserve(new StandardRoom(201));
         System.out.print("LuxRoom: ");
-        luxService.reserve();
+        service.reserve(new LuxRoom(301));
         System.out.print("UltraLuxRoom: ");
-        ultraLuxService.reserve();
+        service.reserve(new UltraLuxRoom(401));
 
-        System.out.println("Проверка исключительной ситуации:");
+        System.out.println("\nТестирование LuxRoomService:");
+        LuxRoomService<LuxRoom> luxService = new InLuxRoomService<>();
+        LuxRoom luxRoom = new LuxRoom(303);
+        String order = "0,5 минеральной воды без газа, цезарь с курицей";
+        System.out.printf("Доставка в комнату №%d заказа '%s'\n",
+                luxRoom.getNumber(), order);
+        luxService.foodDelivery(luxRoom, order);
+        luxService.reserve(luxRoom);
+        luxService.foodDelivery(luxRoom, order);
+        System.out.println("Проверка работы базового сервиса:");
+        luxService.clean(luxRoom);
+
+        System.out.println("\nПроверка исключительной ситуации:");
         try {
-            standardService.reserve();
+            service.reserve(room);
             System.out.printf("Комната №%d была успешно забронирована\n",
-                    standardService.getRoom().getNumber());
+            room.getNumber());
         } catch (RoomAlreadyBookedException e) {
             System.out.println(e.getMessage());
         } finally {
             System.out.println("Проверка закончена");
         }
+        room.setBooked(true);
+
+        System.out.println("\nВывод комнат:");
+        System.out.println(room);
+        System.out.println(new StandardRoom(202));
+        System.out.println(new LuxRoom(302));
+        System.out.println(new UltraLuxRoom(402));
     }
 }

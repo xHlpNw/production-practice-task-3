@@ -1,15 +1,6 @@
-public class InRoomService implements RoomService<Room> {
-    private Room room;
-
-    public Room getRoom() {
-        return room;
-    }
-
-    public InRoomService(Room room) {
-        this.room = room;
-    }
+public class InRoomService<T extends Room> implements RoomService<T> {
     @Override
-    public void free() {
+    public void free(T room) {
         if (room.isBooked()) {
             room.setBooked(false);
             System.out.printf("Комната %d освобождена.\n", room.getNumber());
@@ -19,12 +10,12 @@ public class InRoomService implements RoomService<Room> {
     }
 
     @Override
-    public void clean() {
+    public void clean(T room) {
         System.out.printf("Комната %d убрана.\n", room.getNumber());
     }
 
     @Override
-    public void reserve() {
+    public void reserve(T room) {
         if (!room.isBooked()) {
             room.setBooked(true);
             System.out.printf("Комната %d забронирована.\n", room.getNumber());

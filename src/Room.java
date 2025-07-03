@@ -18,7 +18,7 @@ public abstract class Room {
     public Room(int number) {
         this.number = number;
         isBooked = false;
-        price = new Random().nextInt(1000, 15001);
+        price = RoomPrice.findByTitle(getClass().getName()).price;
         capacity = new Random().nextInt(1, 6);
     }
 
@@ -56,5 +56,11 @@ public abstract class Room {
 
     public void setBooked(boolean booked) {
         isBooked = booked;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s №%d, цена за сутки: %d руб., статус: %s",
+                getClass().getName(), number, price, isBooked ? "занят" : "свободен");
     }
 }
