@@ -9,7 +9,7 @@
 
 import java.util.Random;
 
-public class Room {
+public abstract class Room {
     private final int number;
     private int capacity;
     private int price;
