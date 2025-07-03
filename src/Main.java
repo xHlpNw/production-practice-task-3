@@ -28,6 +28,8 @@ LuxRoom -> UltraLuxRoom
 
 Протестируйте возможность использования сервиса для любого экземпляра комнаты.
 
+------------------------------------
+
 Доп. задания:
     ● Добавить перечисление Prices и хранить в нем цены на комнаты, задавать цены на комнату с помощью перечисления.
     ● Добавить интерфейс LuxRoomService который имеет один новый метод foodDelivery (доставка еды).
@@ -39,6 +41,29 @@ LuxRoom -> UltraLuxRoom
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        System.out.println("Тестирование InRoomService:");
+        InRoomService economyService = new InRoomService(new EconomyRoom(101));
+        InRoomService standardService = new InRoomService(new StandardRoom(201));
+        InRoomService luxService = new InRoomService(new LuxRoom(301));
+        InRoomService ultraLuxService = new InRoomService(new UltraLuxRoom(401));
+        System.out.print("EconomyRoom: ");
+        economyService.reserve();
+        System.out.print("StandardRoom: ");
+        standardService.reserve();
+        System.out.print("LuxRoom: ");
+        luxService.reserve();
+        System.out.print("UltraLuxRoom: ");
+        ultraLuxService.reserve();
+
+        System.out.println("Проверка исключительной ситуации:");
+        try {
+            standardService.reserve();
+            System.out.printf("Комната №%d была успешно забронирована\n",
+                    standardService.getRoom().getNumber());
+        } catch (RoomAlreadyBookedException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            System.out.println("Проверка закончена");
+        }
     }
 }
